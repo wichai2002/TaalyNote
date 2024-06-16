@@ -18,7 +18,6 @@ const LoginPage = () => {
 
         const response = login(payload)
         console.log(response);
-        
     }
 
     return (

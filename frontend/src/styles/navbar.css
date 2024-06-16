@@ -1,0 +1,19 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Jacques+Francois&display=swap');
+
+.text-style{
+    color: #F3ECD0;
+    font-family: 'Jacques Francois', serif;
+}
+
+
+.nav-logo{
+    font-size: 24px;
+    font-weight: 700;
+    text-shadow: 
+        1px 1px 0 #000, 
+        -1px -1px 0 #000,  
+        1.5px -1.5px 0 #000,
+        -.5px .5px 0 #000,   
+        1px 1px 0 #000;
+}

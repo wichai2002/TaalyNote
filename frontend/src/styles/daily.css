@@ -1,0 +1,35 @@
+@import url('https://fonts.googleapis.com/css2?family=Jacques+Francois&display=swap');
+
+.text-style{
+    font-family: 'Jacques Francois', serif;
+}
+
+.f-cs{
+    font-size: 23.5px;
+    font-weight: 800;
+    color: #634C22;
+}
+
+
+.text-todo{
+    font-size: 20px;
+    font-weight: 500;
+}
+
+
+.btn-sy{
+    background-color: #A9B49F;
+
+}
+
+
+.record-header {
+    font-size: 20.5px;
+    font-weight: 600;
+}
+
+.detail{
+    color: #000101;
+    font-size: 18px;
+    font-weight: 500;
+}

@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Jacques+Francois&display=swap');
 
 .title-authen{
-    font-size: 75px;
+    font-size: 63.5px;
     font-weight: 600;
     color: #4E2F00;
     font-family: 'Jacques Francois', serif;
@@ -36,7 +36,7 @@
 
 @media screen and (max-width: 1429px) {
     .title-authen{
-        font-size: 62px;
+        font-size: 55px;
         font-weight: 500;
         text-shadow: 
         .5px .5px 0 #000, 
