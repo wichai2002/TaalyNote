@@ -6,49 +6,55 @@ import Note from "../models/Note"
 
 
 const fetchAll = async (request: Request, response: Response, next: NextFunction) => {
-    const request_middleware: any = PayloadMiddleware.middleware(request);
-    const notes = await Note.find();
-
-    const filtered_note_with_user = notes.filter(note => {
-        return note.user == request_middleware._id;
-    })
-
-    return response.status(200).json({notes: filtered_note_with_user});
+    const request_middleware: any = await PayloadMiddleware.middleware(request);
+    
+    const notes = await Note.find({ user: request_middleware._id });
+    if (notes.length === 0){
+        return response.status(404).json({ msg: 'No items found for this user' });
+    }
+    return response.status(200).json({ notes })
 }
 
 const fetchById = async (request: Request, response: Response, next: NextFunction) => {
     const _id = request.params.id
-    return Note.findById({_id: _id})
-        .then((note) => { 
-            response.status(200).json({ note }) 
+    return Note.findById({ _id: _id })
+        .then((note) => {
+            response.status(200).json({ note })
         })
         .catch((error) => {
-            console.log(error); 
-            response.status(500).json({error}) 
+            console.log(error);
+            response.status(500).json({ error })
         })
 }
 
 const fetchByDateCreate = async (request: Request, response: Response, next: NextFunction) => {
-    const request_middleware: any = PayloadMiddleware.middleware(request);
+    return response.status(200).send(200)
+}
 
-    var notes = await Note.find();
-    if (notes) {
-        const filtered_note_with_date = notes.filter((note) => {
-            if (note.user == request_middleware._id && note.createdAt.getDate()) {
-                return note
-            }
-        })
-        notes = filtered_note_with_date
+const fetchByLastestCreated = async (request: Request, response: Response, next: NextFunction) => {
+    
+    const request_middleware: any = await PayloadMiddleware.middleware(request);
+    console.log(request_middleware);
+    try {
+    // .sort({ createdAt: -1 }
+        const note = await Note.findOne({ user: request_middleware._id }).sort({createdAt: -1});
+        
+        if (!note){
+            return response.status(404).json({ msg: 'No items found for this user' });
+        }
+
+        return response.status(200).json({ note })
+
+    } catch (err: any) {
+        return response.status(500).json({ message: err.message });
     }
-
-    return response.status(200).json({notes})
 }
 
 const createNote = async (request: Request, response: Response, next: NextFunction) => {
-    const {title, todo_list, expect_list }  = request.body
-    const request_middleware: any = PayloadMiddleware.middleware(request);
+    const { title, todo_list, expect_list } = request.body
+    const request_middleware: any = await PayloadMiddleware.middleware(request);
     const user = request_middleware._id
-    
+
     try {
         const new_note = new Note({
             _id: new mongoose.Types.ObjectId(),
@@ -59,7 +65,7 @@ const createNote = async (request: Request, response: Response, next: NextFuncti
         });
 
         await new_note.save();
-        response.status(201).json({note: new_note})
+        response.status(201).json({ note: new_note })
     } catch (error) {
         console.error("Error creating note:", error);
         response.status(500).json({ message: `Failed to create note: ${error}` });
@@ -73,14 +79,14 @@ const updateNote = async (request: Request, response: Response, next: NextFuncti
         const note = await Note.findById(_id)
         if (note) {
 
-            if (note.user == request_middleware._id){
+            if (note.user == request_middleware._id) {
                 note.set(request.body);
                 await note.save()
                 return response.status(201).json({ note })
-            } else { response.status(403).json({message: `you can do action update with only your note.`}) }
+            } else { response.status(403).json({ message: `you can do action update with only your note.` }) }
 
-        }else {
-            { response.status(404).json({message: `note dose not exist.`}) }
+        } else {
+            { response.status(404).json({ message: `note dose not exist.` }) }
         }
 
     } catch (error) {
@@ -93,13 +99,15 @@ const deleteNote = async (request: Request, response: Response, next: NextFuncti
     const _id = request.params.id
     const middleware_request: any = (request as RequestMiddleWare).payload
 
-    if (_id != middleware_request._id){
+
+    // bug จะเอาไอดีของ note มาเทียบกับ id ของ user ?
+    if (_id != middleware_request._id) {
         response.status(403).json({ message: "You can do action delete with only you note!" })
     }
     return Note.findByIdAndDelete(_id)
-    .then((note) => (note ? response.status(201).json({ note, message: 'Deleted' }) : response.status(404).json({ message: 'not found' })))
-    .catch((error) => response.status(500).json({ error }));
+        .then((note) => (note ? response.status(201).json({ note, message: 'Deleted' }) : response.status(404).json({ message: 'not found' })))
+        .catch((error) => response.status(500).json({ error }));
 }
 
 
-export default {fetchAll, fetchById, createNote, updateNote, deleteNote}
+export default { fetchAll, fetchById, createNote, updateNote, deleteNote, fetchByLastestCreated }

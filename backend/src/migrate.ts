@@ -15,7 +15,6 @@ mongoose.connect(DBHOST)
         User.find()
             .then(users => {console.log('Migration User model completed');})
             .catch(err => console.error('User model error:', err));
-
         Note.find()
         .then(users => {console.log('Migration Note model completed');})
         .catch(err => console.error('Note model error:', err));

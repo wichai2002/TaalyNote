@@ -7,19 +7,20 @@ import { JwtPayload } from "jsonwebtoken";
 //     token: string | JwtPayload;
 // }
 
-const authentication = async (req: Request, res: Response, next: NextFunction) => {
+const authentication = async (request: Request, response: Response, next: NextFunction) => {
     try {
-        const authorization = req.headers.authorization
+        const authorization = request.headers.authorization
 
         if (!authorization) {
-            return res.status(401).json({message: "You are not logged in now"})
+            return response.status(401).json({message: "You are not logged in now"})
         }
+
         const decoded = await token.decode(authorization);
-        (req as RequestMiddleWare).payload = decoded;
+        (request as RequestMiddleWare).payload = decoded;
         next()
     } catch (error) {
         console.log("Error at aunten-middleware");
-        res.status(401).json({message: `${error}`})
+        response.status(401).json({message: `${error}`})
     }
 }
 

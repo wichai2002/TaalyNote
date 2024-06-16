@@ -7,5 +7,4 @@ interface INote {
     createdAt: Date
 }
 
-
 export default INote

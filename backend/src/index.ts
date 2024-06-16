@@ -10,12 +10,10 @@ const app = express();
 
 dotenv.config();
 
-
-
 app.use(cors());
 app.use(express.json());
 
-const port = process.env.PORT || 3001;
+const port = process.env.PORT || 3005;
 process.env.TZ = "Asia/Bangkok"
 
 const logger = () =>
